@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="login">Login</string>
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_create_new_user">CreateNewUser</string>
+    <string name="title_activity_main_list">MainListActivity</string>
+    <string name="title_activity_main_list_view">MainListViewActivity</string>
+    <string name="title_activity_main_fragment_list">MainFragmentListActivity</string>
+    <string name="title_activity_main_list_view_fragment">MainListViewFragment</string>
+</resources>
