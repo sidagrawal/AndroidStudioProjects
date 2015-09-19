@@ -3,6 +3,7 @@ package com.phplogin.sidag.myapplication;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,13 +48,14 @@ public class MainActivity extends AppCompatActivity {
         String login_success = new String();
         try {
             login_success = new phpLogin(this, result).execute(username, password).get();
+            Log.d("login", login_success);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        /*login_success.contains("1")*/
-        if(true) {
+        /**/
+        if(login_success.contains("success")) {
             Intent intent = new Intent(this, MainListActivity.class);
             intent.putExtra("username", username);
             intent.putExtra("password", password);

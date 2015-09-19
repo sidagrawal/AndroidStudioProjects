@@ -11,15 +11,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by sidag_000 on 9/4/2015.
+ * Created by sidag_000 on 9/18/2015.
  */
-public class phpCreateNewUser extends AsyncTask<String, Void, String>{
+public class phpGetAllLists extends AsyncTask<String, Void, String> {
+
 
     private Context context;
     private EditText result;
-    public phpCreateNewUser(Context context, EditText result){
+    public phpGetAllLists(Context context){
         this.context = context;
-        this.result = result;
     }
 
     @Override
@@ -27,9 +27,8 @@ public class phpCreateNewUser extends AsyncTask<String, Void, String>{
         try{
             String username = params[0];
             String password = params[1];
-            String email    = params[2];
-            String link = "http://192.168.1.146:8080/AddToLogin.php?username="+username+"&password="+password+"&email="+email;
-            Log.d("link", link);
+            String link = "http://192.168.1.146:8080/get_all_lists.php?username="+username+"&password="+password;
+            //Log.d("link", link);
 
             URL url = new URL(link);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
@@ -45,11 +44,13 @@ public class phpCreateNewUser extends AsyncTask<String, Void, String>{
                 sb.append(line);
             }
             in.close();
+
+
+
             return sb.toString();
         }
         catch(Exception e){
             return new String("Exception: " + e.getMessage());
         }
     }
-
 }

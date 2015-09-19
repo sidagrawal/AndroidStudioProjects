@@ -27,7 +27,7 @@ public class phpLogin extends AsyncTask<String, Void, String> {
         try{
             String username = params[0];
             String password = params[1];
-            String link = "http://207.23.204.200:8080/helloworld.php?username="+username+"&password="+password;
+            String link = "http://192.168.1.146:8080/helloworld.php?username="+username+"&password="+password;
             Log.d("link", link);
 
             URL url = new URL(link);
@@ -44,6 +44,7 @@ public class phpLogin extends AsyncTask<String, Void, String> {
                 sb.append(line);
             }
             in.close();
+            Log.d("result", sb.toString());
             return sb.toString();
         }
         catch(Exception e){

@@ -2,12 +2,17 @@ package com.phplogin.sidag.myapplication;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 public class MainListActivity extends AppCompatActivity {
 
@@ -25,30 +30,50 @@ public class MainListActivity extends AppCompatActivity {
             username = extras.getString("username");
             password = extras.getString("password");
         }
-        expandableListView = (ExpandableListView)findViewById(R.id.exp_list_view);
-        ArrayList<String> headings = new ArrayList<String>();
-        headings.add("Back");
-        headings.add("Chest");
-        headings.add("Leg");
-        ArrayList<String> child1 = new ArrayList<String>();
-        child1.add("Pull ups");
-        child1.add("Dead Lifts");
-        child1.add("Rows");
-        ArrayList<String> child2 = new ArrayList<String>();
-        child2.add("Chest Press");
-        child2.add("Push ups");
-        child2.add("Flies");
-        ArrayList<String> child3 = new ArrayList<String>();
-        child3.add("Squats");
-        child3.add("Lunges");
-        child3.add("Jumping Jacks");
-        HashMap<String, ArrayList<String>> children = new HashMap<String, ArrayList<String>>();
-        children.put(headings.get(0), child1);
-        children.put(headings.get(1), child2);
-        children.put(headings.get(2), child3);
-        customer = new Customer(username, password, "Sid", headings, children);
-        ListAdapter myAdapter = new ListAdapter(this, customer);
-        expandableListView.setAdapter(myAdapter);
+        String all_lists = "";
+        JSONObject jsonObj = null;
+        try {
+            all_lists = new phpGetAllLists(this).execute(username, password).get();
+            Log.d("json", all_lists);
+            jsonObj = new JSONObject(all_lists);
+            customer = JsonParser.decodeCustomer(jsonObj, username, password);
+            Log.d("Customer", customer.getList_headers().get(0).getName());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+//        expandableListView = (ExpandableListView)findViewById(R.id.exp_list_view);
+//        ArrayList<String> headings = new ArrayList<String>();
+//        headings.add("Back");
+//        headings.add("Chest");
+//        headings.add("Leg");
+//        ArrayList<String> child1 = new ArrayList<String>();
+//        child1.add("Pull ups");
+//        child1.add("Dead Lifts");
+//        child1.add("Rows");
+//        ArrayList<String> child2 = new ArrayList<String>();
+//        child2.add("Chest Press");
+//        child2.add("Push ups");
+//        child2.add("Flies");
+//        ArrayList<String> child3 = new ArrayList<String>();
+//        child3.add("Squats");
+//        child3.add("Lunges");
+//        child3.add("Jumping Jacks");
+//        HashMap<String, ArrayList<String>> children = new HashMap<String, ArrayList<String>>();
+//        children.put(headings.get(0), child1);
+//        children.put(headings.get(1), child2);
+//        children.put(headings.get(2), child3);
+//        customer = new Customer(username, password, "Sid", headings, children);
+//        ListAdapter myAdapter = new ListAdapter(this, customer);
+//        expandableListView.setAdapter(myAdapter);
     }
 
     @Override
