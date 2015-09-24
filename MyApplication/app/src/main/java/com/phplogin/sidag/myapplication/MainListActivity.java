@@ -1,5 +1,7 @@
 package com.phplogin.sidag.myapplication;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-public class MainListActivity extends AppCompatActivity {
+public class MainListActivity extends AppCompatActivity implements FragmentList.OnFragmentInteractionListener {
 
     ExpandableListView expandableListView;
     Customer customer;
@@ -45,35 +47,15 @@ public class MainListActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentList listFrag = new FragmentList();
+        fragmentTransaction.add(R.id.fragment_container, listFrag, "List Fragment");
+        fragmentTransaction.commit();
 
 
 
 
-
-//        expandableListView = (ExpandableListView)findViewById(R.id.exp_list_view);
-//        ArrayList<String> headings = new ArrayList<String>();
-//        headings.add("Back");
-//        headings.add("Chest");
-//        headings.add("Leg");
-//        ArrayList<String> child1 = new ArrayList<String>();
-//        child1.add("Pull ups");
-//        child1.add("Dead Lifts");
-//        child1.add("Rows");
-//        ArrayList<String> child2 = new ArrayList<String>();
-//        child2.add("Chest Press");
-//        child2.add("Push ups");
-//        child2.add("Flies");
-//        ArrayList<String> child3 = new ArrayList<String>();
-//        child3.add("Squats");
-//        child3.add("Lunges");
-//        child3.add("Jumping Jacks");
-//        HashMap<String, ArrayList<String>> children = new HashMap<String, ArrayList<String>>();
-//        children.put(headings.get(0), child1);
-//        children.put(headings.get(1), child2);
-//        children.put(headings.get(2), child3);
-//        customer = new Customer(username, password, "Sid", headings, children);
-//        ListAdapter myAdapter = new ListAdapter(this, customer);
-//        expandableListView.setAdapter(myAdapter);
     }
 
     @Override
@@ -96,5 +78,10 @@ public class MainListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(String id) {
+
     }
 }
