@@ -92,10 +92,8 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
-        //View header =  inflater.inflate(R.layout.header, mListView, false);
-        headerText = new TextView(getActivity());
+        headerText = (TextView) view.findViewById(R.id.header);
         headerText.setText(mheaderText);
-        mListView.addHeaderView(headerText);
         // Set the adapter
         mListView = (ListView) view.findViewById(android.R.id.list);
         mListView.setItemsCanFocus(true);
