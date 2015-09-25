@@ -38,6 +38,14 @@ public class ListHeaders {
         return items;
     }
 
+    public ArrayList<String> getItemNames(){
+        ArrayList<String> result = new ArrayList<String>();
+        for(ListItems item : items){
+            result.add(item.getName());
+        }
+        return result;
+    }
+
     public void setItems(ArrayList<ListItems> items) {
         this.items = items;
     }

@@ -10,9 +10,9 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.phplogin.sidag.myapplication.dummy.DummyContent;
 
 import java.util.ArrayList;
 
@@ -29,19 +29,21 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_LIST_ITEMS = "listItems";
+    private static final String ARG_HEADER_TEXT = "headerText";
+
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ArrayList<ListItems> mlistItems;
+    private String mheaderText;
 
     private OnFragmentInteractionListener mListener;
 
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    private ListView mListView;
+    private TextView headerText;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
@@ -50,14 +52,15 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
     private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static FragmentList newInstance(String param1, String param2) {
+    public static FragmentList newInstance(ArrayList<ListItems> listItems, String headerText) {
         FragmentList fragment = new FragmentList();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_LIST_ITEMS, listItems);
+        args.putString(ARG_HEADER_TEXT, headerText);
         fragment.setArguments(args);
         return fragment;
     }
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -75,23 +78,28 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mlistItems = (ArrayList<ListItems>)getArguments().getSerializable(ARG_LIST_ITEMS);
+            mheaderText = getArguments().getString(ARG_HEADER_TEXT);
         }
 
+
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, new ArrayList<String>());
+        //mAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, android.R.id.text1, mlist);
+        mAdapter = new MyAdapter(getActivity(), mlistItems);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
-
+        //View header =  inflater.inflate(R.layout.header, mListView, false);
+        headerText = new TextView(getActivity());
+        headerText.setText(mheaderText);
+        mListView.addHeaderView(headerText);
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView = (ListView) view.findViewById(android.R.id.list);
+        mListView.setItemsCanFocus(true);
+        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -121,7 +129,7 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 

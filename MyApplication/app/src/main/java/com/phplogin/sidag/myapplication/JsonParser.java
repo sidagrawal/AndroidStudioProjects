@@ -1,5 +1,6 @@
 package com.phplogin.sidag.myapplication;
 import android.app.LauncherActivity;
+import android.util.Log;
 
 import org.json.*;
 
@@ -26,10 +27,8 @@ public class JsonParser {
                 Iterator<?> itemKeys = items.keys();
                 while(itemKeys.hasNext()){
                     String itemKey = (String)itemKeys.next();
-                    if(items.get(itemKey) instanceof JSONObject){
-                        ListItems temp_list_item = new ListItems(itemKey, items.getString(itemKey));
-                        list_items.add(temp_list_item);
-                    }
+                    ListItems temp_list_item = new ListItems(itemKey, items.getString(itemKey));
+                    list_items.add(temp_list_item);
                 }
                 ListHeaders temp_list_header = new ListHeaders(list.getString("name"), key, list_items);
                 list_headers.add(temp_list_header);

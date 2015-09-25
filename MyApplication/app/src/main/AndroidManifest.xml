@@ -25,7 +25,8 @@
         </activity>
         <activity
             android:name=".MainListActivity"
-            android:label="@string/title_activity_main_list" >
+            android:label="@string/title_activity_main_list"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".MainFragmentListActivity"

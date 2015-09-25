@@ -39,7 +39,6 @@ public class MainListActivity extends AppCompatActivity implements FragmentList.
             Log.d("json", all_lists);
             jsonObj = new JSONObject(all_lists);
             customer = JsonParser.decodeCustomer(jsonObj, username, password);
-            Log.d("Customer", customer.getList_headers().get(0).getName());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -49,8 +48,10 @@ public class MainListActivity extends AppCompatActivity implements FragmentList.
         }
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        FragmentList listFrag = new FragmentList();
-        fragmentTransaction.add(R.id.fragment_container, listFrag, "List Fragment");
+        for(ListHeaders listHeader : customer.getList_headers()){
+            FragmentList listFrag = FragmentList.newInstance(listHeader.getItems(), listHeader.getName());
+            fragmentTransaction.add(R.id.fragment_container, listFrag, "List Fragment");
+        }
         fragmentTransaction.commit();
 
 
