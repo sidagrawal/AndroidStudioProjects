@@ -28,7 +28,7 @@ public class phpCreateNewUser extends AsyncTask<String, Void, String>{
             String username = params[0];
             String password = params[1];
             String email    = params[2];
-            String link = "http://192.168.1.146:8080/AddToLogin.php?username="+username+"&password="+password+"&email="+email;
+            String link = "http://159.203.66.71/AddToLogin.php?username="+username+"&password="+password+"&email="+email;
             Log.d("link", link);
 
             URL url = new URL(link);

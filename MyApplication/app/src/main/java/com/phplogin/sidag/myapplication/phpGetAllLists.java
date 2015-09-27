@@ -27,7 +27,7 @@ public class phpGetAllLists extends AsyncTask<String, Void, String> {
         try{
             String username = params[0];
             String password = params[1];
-            String link = "http://192.168.1.146:8080/get_all_lists.php?username="+username+"&password="+password;
+            String link = "http://159.203.66.71/get_all_lists.php?username="+username+"&password="+password;
             //Log.d("link", link);
 
             URL url = new URL(link);

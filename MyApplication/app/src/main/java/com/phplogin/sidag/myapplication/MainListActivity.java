@@ -48,9 +48,11 @@ public class MainListActivity extends AppCompatActivity implements FragmentList.
         }
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        for(ListHeaders listHeader : customer.getList_headers()){
-            FragmentList listFrag = FragmentList.newInstance(listHeader.getItems(), listHeader.getName());
-            fragmentTransaction.add(R.id.fragment_container, listFrag, "List Fragment");
+        if(customer != null) {
+            for (ListHeaders listHeader : customer.getList_headers()) {
+                FragmentList listFrag = FragmentList.newInstance(listHeader.getItems(), listHeader.getName());
+                fragmentTransaction.add(R.id.fragment_container, listFrag, "List Fragment");
+            }
         }
         fragmentTransaction.commit();
 
