@@ -28,14 +28,16 @@
             android:label="@string/title_activity_main_list"
             android:windowSoftInputMode="adjustPan">
         </activity>
-        <activity
-            android:name=".MainFragmentListActivity"
-            android:label="@string/title_activity_main_fragment_list" >
-        </activity>
-        <activity
-            android:name=".MainListViewActivity"
-            android:label="@string/title_activity_main_list_view" >
-        </activity>
+
+        <service
+            android:name="com.phplogin.sidag.myapplication.AuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@layout/authenticator" />
+        </service>
     </application>
 
 </manifest>
