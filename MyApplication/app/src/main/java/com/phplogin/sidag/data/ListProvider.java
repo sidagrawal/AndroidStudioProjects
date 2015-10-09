@@ -19,7 +19,7 @@ public class ListProvider extends ContentProvider {
     public static final int LISTITEMS = 100;
     public static final int LISTITEM_ID = 110;
 
-    private static final String LISTITEMS_BASE_PATH = "listitems";
+    private static final String LISTITEMS_BASE_PATH = ListDatabaseHelper.TABLE_LIST;
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
             + "/" + LISTITEMS_BASE_PATH);
 

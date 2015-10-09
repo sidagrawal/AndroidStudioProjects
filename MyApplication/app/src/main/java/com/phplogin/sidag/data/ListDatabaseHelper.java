@@ -14,14 +14,14 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "list_data";
 
     public static final String TABLE_LIST = "listitems";
-    public static final String LIST_ITEM_ID = "list_item_id";
+    public static final String LIST_ITEM_ID = "_id";
     public static final String LIST_ID = "list_id";
     public static final String LIST_ITEM = "list_item";
     public static final String COL_URL = "url";
 
     private static final String CREATE_TABLE_TUTORIALS = "create table " + TABLE_LIST
-            + " (" + LIST_ITEM_ID + " integer primary key autoincrement, " +LIST_ID + " integer, " + LIST_ITEM
-            + " text not null, " + COL_URL + " text not null);";
+            + " ( " + LIST_ITEM_ID + " integer primary key autoincrement, " +LIST_ID + " integer, " + LIST_ITEM
+            + " text not null, " + COL_URL + " text not null );";
 
     private static final String DB_SCHEMA = CREATE_TABLE_TUTORIALS;
 
@@ -32,6 +32,7 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DB_SCHEMA);
+        db.execSQL("INSERT INTO listitems VALUES(10, 10, 'SID', 'SID')");
     }
 
     @Override

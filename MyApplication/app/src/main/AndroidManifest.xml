@@ -29,6 +29,13 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
 
+        <provider
+            android:authorities="com.phplogin.sidag.data.ListProvider"
+            android:multiprocess="true"
+            android:name="com.phplogin.sidag.data.ListProvider">
+        </provider>
+
+
         <service
             android:name="com.phplogin.sidag.myapplication.AuthenticatorService">
             <intent-filter>

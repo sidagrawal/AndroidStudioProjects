@@ -1,18 +1,28 @@
 package com.phplogin.sidag.myapplication;
 
 import android.app.Activity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+
+import com.phplogin.sidag.data.ListDatabaseHelper;
+import com.phplogin.sidag.data.ListProvider;
 
 import java.util.ArrayList;
 
@@ -25,7 +35,7 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class FragmentList extends Fragment implements AbsListView.OnItemClickListener {
+public class FragmentList extends Fragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,6 +60,7 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
      * Views.
      */
     private ListAdapter mAdapter;
+    private CursorAdapter cAdapter;
 
     // TODO: Rename and change types of parameters
     public static FragmentList newInstance(ArrayList<ListItems> listItems, String headerText) {
@@ -97,7 +108,16 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
         // Set the adapter
         mListView = (ListView) view.findViewById(android.R.id.list);
         mListView.setItemsCanFocus(true);
-        mListView.setAdapter(mAdapter);
+        //mListView.setAdapter(mAdapter);
+        String[] uiBindFrom = {"'" + ListDatabaseHelper.LIST_ITEM + "'"};
+        int[] uiBindTo = { R.id.title };
+
+        cAdapter = new SimpleCursorAdapter(getActivity()
+                .getApplicationContext(), android.R.layout.simple_list_item_1, null,
+                uiBindFrom, uiBindTo);
+        mListView.setAdapter(cAdapter);
+
+        getLoaderManager().initLoader(0, null, this);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -142,6 +162,25 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = { "'" + ListDatabaseHelper.LIST_ITEM_ID + "' as _id", "'" + ListDatabaseHelper.LIST_ITEM + "'"};
+        //String[] projection = { ListDatabaseHelper.LIST_ITEM_ID , ListDatabaseHelper.LIST_ITEM };
+        CursorLoader cursor = new CursorLoader(getActivity(), ListProvider.CONTENT_URI, projection , null, null, null);
+        return cursor;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d("cursor", data.getColumnName(0));
+        cAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
     /**
