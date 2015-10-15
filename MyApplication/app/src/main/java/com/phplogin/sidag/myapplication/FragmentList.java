@@ -115,10 +115,10 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
         cAdapter = new SimpleCursorAdapter(getActivity()
                 .getApplicationContext(), android.R.layout.simple_list_item_1, null,
                 uiBindFrom, uiBindTo);
-        mListView.setAdapter(cAdapter);
 
         getLoaderManager().initLoader(0, null, this);
 
+        mListView.setAdapter(cAdapter);
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
@@ -174,8 +174,8 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d("cursor", data.getColumnName(0));
-        cAdapter.swapCursor(data);
+        Log.d("cursor", (String) String.valueOf(data.getCount()));
+        cAdapter.changeCursor(data);
     }
 
     @Override

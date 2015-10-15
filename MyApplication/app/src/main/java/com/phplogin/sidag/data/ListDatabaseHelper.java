@@ -33,6 +33,7 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DB_SCHEMA);
         db.execSQL("INSERT INTO listitems VALUES(10, 10, 'SID', 'SID')");
+        db.execSQL("INSERT INTO listitems VALUES(11, 11, 'SIDD', 'SIDD')");
     }
 
     @Override

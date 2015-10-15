@@ -2,12 +2,17 @@ package com.phplogin.sidag.data;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+
+import java.net.URI;
 
 /**
  * Created by Siddhant on 10/6/2015.
@@ -34,10 +39,12 @@ public class ListProvider extends ContentProvider {
         sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH, LISTITEMS);
         sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH + "/#", LISTITEM_ID);
     }
+    SQLiteDatabase db;
 
     @Override
     public boolean onCreate() {
         mDB = new ListDatabaseHelper(getContext());
+        db = mDB.getWritableDatabase();
         return true;
     }
 
@@ -75,7 +82,13 @@ public class ListProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        long rowID = db.insert(ListDatabaseHelper.TABLE_LIST, "", values);
+        if(rowID > 0){
+            Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+            getContext().getContentResolver().notifyChange(_uri, null);
+            return _uri;
+        }
+        throw new SQLException("Failed to insert record into " + uri);
     }
 
     @Override
