@@ -167,7 +167,6 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = { "'" + ListDatabaseHelper.LIST_ITEM_ID + "' as _id", "'" + ListDatabaseHelper.LIST_ITEM + "'"};
-        //String[] projection = { ListDatabaseHelper.LIST_ITEM_ID , ListDatabaseHelper.LIST_ITEM };
         CursorLoader cursor = new CursorLoader(getActivity(), ListProvider.CONTENT_URI, projection , null, null, null);
         return cursor;
     }

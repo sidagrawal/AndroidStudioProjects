@@ -1,9 +1,14 @@
 package com.phplogin.sidag.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.phplogin.sidag.myapplication.Customer;
+import com.phplogin.sidag.myapplication.ListHeaders;
+import com.phplogin.sidag.myapplication.ListItems;
 
 /**
  * Created by Siddhant on 10/5/2015.
@@ -17,11 +22,12 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
     public static final String LIST_ITEM_ID = "_id";
     public static final String LIST_ID = "list_id";
     public static final String LIST_ITEM = "list_item";
-    public static final String COL_URL = "url";
+    public static final String LIST_ITEM_UID = "uid";
 
     private static final String CREATE_TABLE_TUTORIALS = "create table " + TABLE_LIST
             + " ( " + LIST_ITEM_ID + " integer primary key autoincrement, " +LIST_ID + " integer, " + LIST_ITEM
-            + " text not null, " + COL_URL + " text not null );";
+            + " text not null, " + LIST_ITEM_UID + " text not null );";
+
 
     private static final String DB_SCHEMA = CREATE_TABLE_TUTORIALS;
 
@@ -32,8 +38,6 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DB_SCHEMA);
-        db.execSQL("INSERT INTO listitems VALUES(10, 10, 'SID', 'SID')");
-        db.execSQL("INSERT INTO listitems VALUES(11, 11, 'SIDD', 'SIDD')");
     }
 
     @Override
@@ -44,4 +48,5 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
 
     }
+
 }

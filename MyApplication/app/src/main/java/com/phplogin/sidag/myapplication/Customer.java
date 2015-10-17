@@ -1,5 +1,13 @@
 package com.phplogin.sidag.myapplication;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import com.phplogin.sidag.data.ListDatabaseHelper;
+import com.phplogin.sidag.data.ListProvider;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -51,6 +59,19 @@ public class Customer {
     public void setList_headers(ArrayList<ListHeaders> list_headers) {
         this.list_headers = list_headers;
     }
-    
+
+    public void addToDatabase(Context context){
+        ContentValues values = new ContentValues();
+        for(ListHeaders listHeaders : list_headers){
+            int listHeaderID = Integer.parseInt(listHeaders.getId());
+            values.put(ListDatabaseHelper.LIST_ID, listHeaderID);
+            for(ListItems listItems : listHeaders.getItems()){
+                values.put(ListDatabaseHelper.LIST_ITEM, listItems.getName());
+                values.put(ListDatabaseHelper.LIST_ITEM_UID, listItems.getUid());
+                context.getContentResolver().insert(ListProvider.CONTENT_URI, values);
+            }
+        }
+    }
+
 
 }

@@ -82,6 +82,7 @@ public class ListProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        db = mDB.getWritableDatabase();
         long rowID = db.insert(ListDatabaseHelper.TABLE_LIST, "", values);
         if(rowID > 0){
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
