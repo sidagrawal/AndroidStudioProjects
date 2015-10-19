@@ -16,17 +16,17 @@ import android.text.TextUtils;
 /**
  * Created by Siddhant on 10/6/2015.
  */
-public class ListProvider extends ContentProvider {
+public class ItemProvider extends ContentProvider {
     private ListDatabaseHelper mDB;
 
     private static final String AUTHORITY = "com.phplogin.sidag.data.ListProvider";
-    public static final int LIST = 100;
-    public static final int LIST_ID = 110;
+    public static final int LISTITEMS = 100;
+    public static final int LISTITEM_ID = 110;
 
-    public static final String LISTITEMS_BASE_PATH = ListDatabaseHelper.TABLE_LIST;
+    public static final String LISTITEMS_BASE_PATH = ListDatabaseHelper.TABLE_ITEMS;
 
-    public static final Uri CONTENT_URI_LISTS = Uri.parse("content://" + AUTHORITY
-            + "/" + ListDatabaseHelper.TABLE_ITEMS);
+    public static final Uri CONTENT_URI_ITEMS = Uri.parse("content://" + AUTHORITY
+            + "/" + LISTITEMS_BASE_PATH);
 
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/mt-listitem";
@@ -36,8 +36,8 @@ public class ListProvider extends ContentProvider {
     private static final UriMatcher sURIMatcher = new UriMatcher(
             UriMatcher.NO_MATCH);
     static {
-        sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH, LIST);
-        sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH + "/#", LIST_ID);
+        sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH, LISTITEMS);
+        sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH + "/#", LISTITEM_ID);
     }
     SQLiteDatabase db;
 
@@ -56,11 +56,11 @@ public class ListProvider extends ContentProvider {
 
             int uriType = sURIMatcher.match(uri);
             switch (uriType) {
-                case LIST_ID:
+                case LISTITEM_ID:
                     queryBuilder.appendWhere(ListDatabaseHelper.LIST_ITEM_ID + "="
                             + uri.getLastPathSegment());
                     break;
-                case LIST:
+                case LISTITEMS:
                     // no filter
                     break;
                 default:
@@ -85,7 +85,7 @@ public class ListProvider extends ContentProvider {
         db = mDB.getWritableDatabase();
         long rowID = db.insert(ListDatabaseHelper.TABLE_ITEMS, "", values);
         if(rowID > 0){
-            Uri _uri = ContentUris.withAppendedId(CONTENT_URI_LISTS, rowID);
+            Uri _uri = ContentUris.withAppendedId(CONTENT_URI_ITEMS, rowID);
             getContext().getContentResolver().notifyChange(_uri, null);
             return _uri;
         }
@@ -98,11 +98,11 @@ public class ListProvider extends ContentProvider {
         SQLiteDatabase db = mDB.getWritableDatabase();
         int rowsDeleted = 0;
         switch (uriType) {
-            case LIST:
+            case LISTITEMS:
                 rowsDeleted = db.delete(ListDatabaseHelper.TABLE_ITEMS, selection,
                         selectionArgs);
                 break;
-            case LIST_ID:
+            case LISTITEM_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
                     rowsDeleted = db.delete(ListDatabaseHelper.TABLE_ITEMS,
@@ -129,13 +129,13 @@ public class ListProvider extends ContentProvider {
         SQLiteDatabase db = mDB.getWritableDatabase();
         int rowsUpdated = 0;
         switch (uriType) {
-            case LIST:
+            case LISTITEMS:
                 rowsUpdated = db.update(ListDatabaseHelper.TABLE_ITEMS,
                         values,
                         selection,
                         selectionArgs);
                 break;
-            case LIST_ID:
+            case LISTITEM_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
                     rowsUpdated = db.update(ListDatabaseHelper.TABLE_ITEMS,

@@ -2,6 +2,10 @@ package com.phplogin.sidag.myapplication;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,23 +14,25 @@ import android.view.MenuItem;
 import android.widget.ExpandableListView;
 
 import com.phplogin.sidag.data.ListDatabaseHelper;
+import com.phplogin.sidag.data.ListProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-public class MainListActivity extends AppCompatActivity implements FragmentList.OnFragmentInteractionListener {
+public class MainListActivity extends AppCompatActivity implements FragmentList.OnFragmentInteractionListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     ExpandableListView expandableListView;
     Customer customer;
+    Cursor list_ids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list);
+
+        //TODO : This can be deleted after the syncadapter is done
         String username = "";
         String password = "";
         Bundle extras = getIntent().getExtras();
@@ -48,15 +54,18 @@ public class MainListActivity extends AppCompatActivity implements FragmentList.
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        getLoaderManager().initLoader(0, null, this);
+
+        //Create a fragment for every list the user ha
+        // TODO : after syncadapter is done the new instance of each fragment needs list data
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if(customer != null) {
-            for (ListHeaders listHeader : customer.getList_headers()) {
-                FragmentList listFrag = FragmentList.newInstance(listHeader.getItems(), listHeader.getName());
-                fragmentTransaction.add(R.id.fragment_container, listFrag, "List Fragment");
-                break;
-            }
+        list_ids.moveToFirst();
+        while (!list_ids.isAfterLast()) {
+            FragmentList listFrag = FragmentList.newInstance();
+            fragmentTransaction.add(R.id.fragment_container, listFrag, "List Fragment");
         }
+
         fragmentTransaction.commit();
 
 
@@ -88,6 +97,24 @@ public class MainListActivity extends AppCompatActivity implements FragmentList.
 
     @Override
     public void onFragmentInteraction(String id) {
+
+    }
+
+    //Get all the lists of the user
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {ListDatabaseHelper.LIST_ID};
+        CursorLoader cursor = new CursorLoader(this, ListProvider.CONTENT_URI_LISTS, projection , null, null, null);
+        return cursor;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        list_ids = data;
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
 
     }
 }

@@ -13,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -23,8 +21,6 @@ import android.widget.TextView;
 
 import com.phplogin.sidag.data.ListDatabaseHelper;
 import com.phplogin.sidag.data.ListProvider;
-
-import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -44,7 +40,6 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
 
 
     // TODO: Rename and change types of parameters
-    private ArrayList<ListItems> mlistItems;
     private String mheaderText;
 
     private OnFragmentInteractionListener mListener;
@@ -59,15 +54,14 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
     private CursorAdapter cAdapter;
 
     // TODO: Rename and change types of parameters
-    public static FragmentList newInstance(ArrayList<ListItems> listItems, String headerText) {
+    public static FragmentList newInstance() {
         FragmentList fragment = new FragmentList();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_LIST_ITEMS, listItems);
-        args.putString(ARG_HEADER_TEXT, headerText);
+//        args.putSerializable(ARG_LIST_ITEMS, listItems);
+//        args.putString(ARG_HEADER_TEXT, headerText);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,44 +74,46 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
     public FragmentList() {
     }
 
-    public void setAdapterData(){
-
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mlistItems = (ArrayList<ListItems>)getArguments().getSerializable(ARG_LIST_ITEMS);
             mheaderText = getArguments().getString(ARG_HEADER_TEXT);
         }
 
 
         // TODO: Change Adapter to display your content
         //mAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, android.R.id.text1, mlist);
-        mAdapter = new MyAdapter(getActivity(), mlistItems);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
+
+        //Set the Header to the List's name
         headerText = (TextView) view.findViewById(R.id.header);
         headerText.setText(mheaderText);
-        // Set the adapter
+
+
         mListView = (ListView) view.findViewById(android.R.id.list);
         mListView.setItemsCanFocus(true);
-        //mListView.setAdapter(mAdapter);
-        String[] uiBindFrom = {"'" + ListDatabaseHelper.LIST_ITEM + "'"};
-        int[] uiBindTo = { R.id.title };
 
+        //Set where to get the data from and where to put it
+        String[] uiBindFrom = {ListDatabaseHelper.LIST_ITEM };
+        int[] uiBindTo = { R.id.ItemCaption };
+
+        //Create an empty Cursor Adapter to hold the cursor from the Database
         cAdapter = new SimpleCursorAdapter(getActivity()
-                .getApplicationContext(), android.R.layout.simple_list_item_1, null,
+                .getApplicationContext(), R.layout.item, null,
                 uiBindFrom, uiBindTo);
 
+        //Start the Cursor Loader
         getLoaderManager().initLoader(0, null, this);
 
+        //Set the adapter for the ListView
         mListView.setAdapter(cAdapter);
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -164,13 +160,15 @@ public class FragmentList extends Fragment implements AbsListView.OnItemClickLis
         }
     }
 
+    //Query the database for items for the given list UID
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = { "'" + ListDatabaseHelper.LIST_ITEM_ID + "' as _id", "'" + ListDatabaseHelper.LIST_ITEM + "'"};
-        CursorLoader cursor = new CursorLoader(getActivity(), ListProvider.CONTENT_URI, projection , null, null, null);
+        String[] projection = { "'" + ListDatabaseHelper.LIST_ITEM_ID + "' as _id", ListDatabaseHelper.LIST_ITEM};
+        CursorLoader cursor = new CursorLoader(getActivity(), ListProvider.CONTENT_URI_LISTS, projection , null, null, null);
         return cursor;
     }
 
+    //Swap the cursor in the cursor adapter
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d("cursor", (String) String.valueOf(data.getCount()));

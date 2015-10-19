@@ -1,5 +1,6 @@
 package com.phplogin.sidag.myapplication;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.phplogin.sidag.data.ListDatabaseHelper;
+import com.phplogin.sidag.data.ListProvider;
+
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.deleteDatabase("list_data");
     }
 
     @Override
@@ -55,7 +60,16 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         /**/
-        if(login_success.contains("success")) {
+        if(!login_success.contains("fail")) {
+            ContentValues user = new ContentValues();
+            user.put("username", username);
+            user.put("password", password);
+            user.put("email", login_success);
+            String[] projection = {ListDatabaseHelper.USERNAME};
+            String selection = ListDatabaseHelper.USERNAME + " = " + username;
+            if(getContentResolver().query(ListProvider.CONTENT_URI_USERS, projection, selection, null, null).getCount() == 0){
+                getContentResolver().insert(ListProvider.CONTENT_URI_USERS, user);
+            }
             Intent intent = new Intent(this, MainListActivity.class);
             intent.putExtra("username", username);
             intent.putExtra("password", password);
