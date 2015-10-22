@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.phplogin.sidag.data.ListDatabaseHelper;
 import com.phplogin.sidag.data.ListProvider;
+import com.phplogin.sidag.data.UserProvider;
 
 import java.util.concurrent.ExecutionException;
 
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
             user.put("email", login_success);
             String[] projection = {ListDatabaseHelper.USERNAME};
             String selection = ListDatabaseHelper.USERNAME + " = " + username;
-            if(getContentResolver().query(ListProvider.CONTENT_URI_USERS, projection, selection, null, null).getCount() == 0){
-                getContentResolver().insert(ListProvider.CONTENT_URI_USERS, user);
+            if(getContentResolver().query(UserProvider.CONTENT_URI_USERS, projection, selection, null, null).getCount() == 0){
+                getContentResolver().insert(UserProvider.CONTENT_URI_USERS, user);
             }
             Intent intent = new Intent(this, MainListActivity.class);
             intent.putExtra("username", username);

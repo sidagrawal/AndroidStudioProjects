@@ -6,7 +6,12 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
+import android.database.Cursor;
 import android.os.Bundle;
+
+import com.phplogin.sidag.data.ListDatabaseHelper;
+import com.phplogin.sidag.data.ListProvider;
+import com.phplogin.sidag.data.UserProvider;
 
 /**
  * Created by Siddhant on 10/17/2015.
@@ -45,10 +50,26 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
         //Get email of user from local database
+        String[] projection = {ListDatabaseHelper.EMAIL};
+        Cursor email_cursor = mContentResolver.query(UserProvider.CONTENT_URI_USERS, projection, null, null, null);
+        String email = new String();
+        if(email_cursor.moveToFirst()){
+            email = email_cursor.getString(email_cursor.getColumnIndex(ListDatabaseHelper.EMAIL));
+        }
 
-        //Get the list of lists from the remote database
+        //Get the list of lists from the remote database using email
+
 
         //Get the list of lists from the local database
+
+        //Find what is in Remote but not in Local and make a list of what to add to Remote
+
+        //Find all the Lists newly added to Local and add them to Remote
+
+        //Find the lists that need to be deleted in local and delete that person-list pairing from remote
+
+        //Check timestamps of each list and listitem, if timestamp is less then update that list/listitem
+        //in the place with the lessor timestamp
 
 
 
