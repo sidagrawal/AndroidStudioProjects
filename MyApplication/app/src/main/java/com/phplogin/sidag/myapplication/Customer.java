@@ -25,6 +25,10 @@ public class Customer {
         this.list_headers = list_headers;
     }
 
+    public Customer(){
+
+    };
+
     public String getUsername() {
         return username;
     }

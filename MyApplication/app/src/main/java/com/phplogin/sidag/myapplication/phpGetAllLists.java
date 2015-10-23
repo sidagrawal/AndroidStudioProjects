@@ -17,7 +17,6 @@ public class phpGetAllLists extends AsyncTask<String, Void, String> {
 
 
     private Context context;
-    private EditText result;
     public phpGetAllLists(Context context){
         this.context = context;
     }
@@ -52,5 +51,8 @@ public class phpGetAllLists extends AsyncTask<String, Void, String> {
         catch(Exception e){
             return new String("Exception: " + e.getMessage());
         }
+    }
+    protected void onPostExecute(String lists){
+
     }
 }

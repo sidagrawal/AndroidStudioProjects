@@ -10,22 +10,27 @@ public class ListItems {
     private String name;
     private String id;
     private String uid;
+    private int timestamp;
+    private int status;
 
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public ListItems(String id, String name) {
+    public ListItems(String id, String name, int timestamp, int status) {
         this.id = id;
         this.name = name;
-        this.uid = getUID();
+        this.uid = makeUID();
+        this.timestamp = timestamp;
+        this.status = status;
     }
 
-    private String getUID(){
+    public ListItems(String id, String name, String uid, int timestamp, int status) {
+        this.id = id;
+        this.name = name;
+        this.uid = uid;
+        this.timestamp = timestamp;
+        this.status = status;
+
+    }
+
+    private String makeUID(){
         String result = "";
         String opt = "abcdefghijklmnopqrstuvxyzABCDEFGHIJKLMNOPQRSTUVXYZ0987654321";
         Random rand = new Random();
@@ -35,6 +40,31 @@ public class ListItems {
         }
         return result;
     }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
 
     public String getName() {
         return name;

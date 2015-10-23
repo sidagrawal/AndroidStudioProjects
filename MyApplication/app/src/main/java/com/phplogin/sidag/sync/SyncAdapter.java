@@ -12,6 +12,12 @@ import android.os.Bundle;
 import com.phplogin.sidag.data.ListDatabaseHelper;
 import com.phplogin.sidag.data.ListProvider;
 import com.phplogin.sidag.data.UserProvider;
+import com.phplogin.sidag.myapplication.Customer;
+import com.phplogin.sidag.myapplication.phpGetAllLists;
+
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Siddhant on 10/17/2015.
@@ -58,6 +64,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         //Get the list of lists from the remote database using email
+        String all_lists = "";
+        JSONObject jsonObj = null;
+        Customer customer = null;
+        try {
+            all_lists = new phpGetAllLists(getContext()).execute(email).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
 
         //Get the list of lists from the local database
