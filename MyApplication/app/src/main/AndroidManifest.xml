@@ -30,6 +30,18 @@
         </activity>
 
         <provider
+            android:authorities="com.phplogin.sidag.data.UserProvider"
+            android:multiprocess="true"
+            android:name="com.phplogin.sidag.data.UserProvider">
+        </provider>
+
+        <provider
+            android:authorities="com.phplogin.sidag.data.ItemProvider"
+            android:multiprocess="true"
+            android:name="com.phplogin.sidag.data.ItemProvider">
+        </provider>
+
+        <provider
             android:authorities="com.phplogin.sidag.data.ListProvider"
             android:multiprocess="true"
             android:name="com.phplogin.sidag.data.ListProvider">

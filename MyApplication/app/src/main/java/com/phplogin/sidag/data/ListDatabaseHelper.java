@@ -35,7 +35,7 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
     public static final String EMAIL = "email";
 
     //Columns for the Users Table
-    public static final String TABLE_USER_ID = "users_id";
+    public static final String USER_ID = "users_id";
     public static final String TABLE_USER = "users";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
@@ -53,9 +53,8 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
 
     //Create statement for the users table
     private static final String CREATE_TABLE_USERS = "create table " + TABLE_USER
-            + " ( " + TABLE_USER_ID + " integer primary key autoincrement, " + USERNAME
-            + " text not null, " + EMAIL + " text not null, "+ PASSWORD + " text not null "
-            + "PRIMARY KEY (" + USERNAME + ", " + PASSWORD + " ));";
+            + " ( " + USER_ID + " integer primary key autoincrement, " + USERNAME
+            + " text not null, " + EMAIL + " text not null, "+ PASSWORD + " text not null );";
 
 
 

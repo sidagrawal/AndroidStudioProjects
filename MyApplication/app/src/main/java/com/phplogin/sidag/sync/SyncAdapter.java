@@ -64,11 +64,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         //Get the list of lists from the remote database using email
-        String all_lists = "";
-        JSONObject jsonObj = null;
         Customer customer = null;
         try {
-            all_lists = new phpGetAllLists(getContext()).execute(email).get();
+            customer = new phpGetAllLists(getContext()).execute(email).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

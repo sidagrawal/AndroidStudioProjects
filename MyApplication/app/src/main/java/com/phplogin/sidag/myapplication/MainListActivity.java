@@ -35,38 +35,35 @@ public class MainListActivity extends AppCompatActivity implements FragmentList.
         //TODO : This can be deleted after the syncadapter is done
         String username = "";
         String password = "";
+        String email = "";
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             username = extras.getString("username");
             password = extras.getString("password");
+            email = extras.getString("email");
         }
-        String all_lists = "";
-        JSONObject jsonObj = null;
         try {
-            all_lists = new phpGetAllLists(this).execute(username, password).get();
-            Log.d("json", all_lists);
-            jsonObj = new JSONObject(all_lists);
-            customer = JsonParser.decodeCustomer(jsonObj, username, password);
+            customer = new phpGetAllLists(this).execute(email).get();
+            if(customer != null)
+                Log.d("Customer", customer.getList_headers().get(0).getItemNames().get(0));
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
         getLoaderManager().initLoader(0, null, this);
 
-        //Create a fragment for every list the user ha
-        // TODO : after syncadapter is done the new instance of each fragment needs list data
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        list_ids.moveToFirst();
-        while (!list_ids.isAfterLast()) {
-            FragmentList listFrag = FragmentList.newInstance();
-            fragmentTransaction.add(R.id.fragment_container, listFrag, "List Fragment");
-        }
-
-        fragmentTransaction.commit();
+//        //Create a fragment for every list the user ha
+//        // TODO : after syncadapter is done the new instance of each fragment needs list data
+//        FragmentManager fragmentManager = getFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        list_ids.moveToFirst();
+//        while (!list_ids.isAfterLast()) {
+//            FragmentList listFrag = FragmentList.newInstance();
+//            fragmentTransaction.add(R.id.fragment_container, listFrag, "List Fragment");
+//        }
+//
+//        fragmentTransaction.commit();
 
 
 

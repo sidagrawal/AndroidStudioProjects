@@ -2,6 +2,7 @@ package com.phplogin.sidag.myapplication;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,13 +68,15 @@ public class MainActivity extends AppCompatActivity {
             user.put("password", password);
             user.put("email", login_success);
             String[] projection = {ListDatabaseHelper.USERNAME};
-            String selection = ListDatabaseHelper.USERNAME + " = " + username;
-            if(getContentResolver().query(UserProvider.CONTENT_URI_USERS, projection, selection, null, null).getCount() == 0){
+            String selection = ListDatabaseHelper.USERNAME + " = '" + username + "'";
+            Cursor check_user = getContentResolver().query(UserProvider.CONTENT_URI_USERS, projection, selection, null, null);
+            if(check_user == null){
                 getContentResolver().insert(UserProvider.CONTENT_URI_USERS, user);
             }
             Intent intent = new Intent(this, MainListActivity.class);
             intent.putExtra("username", username);
             intent.putExtra("password", password);
+            intent.putExtra("email", login_success);
             startActivity(intent);
         }
     }

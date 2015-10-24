@@ -64,8 +64,6 @@ public class Customer {
     public void addToDatabase(Context context){
         ContentValues values = new ContentValues();
         for(ListHeaders listHeaders : list_headers){
-            int listHeaderID = Integer.parseInt(listHeaders.getId());
-            values.put(ListDatabaseHelper.LIST_ID, listHeaderID);
             for(ListItems listItems : listHeaders.getItems()){
                 values.put(ListDatabaseHelper.LIST_ITEM, listItems.getName());
                 values.put(ListDatabaseHelper.LIST_ITEM_UID, listItems.getUid());

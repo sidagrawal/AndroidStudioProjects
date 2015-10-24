@@ -26,7 +26,7 @@ public class ListProvider extends ContentProvider {
     public static final String LISTITEMS_BASE_PATH = ListDatabaseHelper.TABLE_LIST;
 
     public static final Uri CONTENT_URI_LISTS = Uri.parse("content://" + AUTHORITY
-            + "/" + ListDatabaseHelper.TABLE_ITEMS);
+            + "/" + LISTITEMS_BASE_PATH);
 
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/mt-listitem";
@@ -52,12 +52,12 @@ public class ListProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
             SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-            queryBuilder.setTables(ListDatabaseHelper.TABLE_ITEMS);
+            queryBuilder.setTables(ListDatabaseHelper.TABLE_LIST);
 
             int uriType = sURIMatcher.match(uri);
             switch (uriType) {
                 case LIST_ID:
-                    queryBuilder.appendWhere(ListDatabaseHelper.LIST_ITEM_ID + "="
+                    queryBuilder.appendWhere(ListDatabaseHelper.LIST_ID + "="
                             + uri.getLastPathSegment());
                     break;
                 case LIST:
@@ -83,7 +83,7 @@ public class ListProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         db = mDB.getWritableDatabase();
-        long rowID = db.insert(ListDatabaseHelper.TABLE_ITEMS, "", values);
+        long rowID = db.insert(ListDatabaseHelper.TABLE_LIST, "", values);
         if(rowID > 0){
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI_LISTS, rowID);
             getContext().getContentResolver().notifyChange(_uri, null);
@@ -99,18 +99,18 @@ public class ListProvider extends ContentProvider {
         int rowsDeleted = 0;
         switch (uriType) {
             case LIST:
-                rowsDeleted = db.delete(ListDatabaseHelper.TABLE_ITEMS, selection,
+                rowsDeleted = db.delete(ListDatabaseHelper.TABLE_LIST, selection,
                         selectionArgs);
                 break;
             case LIST_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
-                    rowsDeleted = db.delete(ListDatabaseHelper.TABLE_ITEMS,
-                            ListDatabaseHelper.LIST_ITEM_UID + "=" + id,
+                    rowsDeleted = db.delete(ListDatabaseHelper.TABLE_LIST,
+                            ListDatabaseHelper.LIST_ID + "=" + id,
                             null);
                 } else {
-                    rowsDeleted = db.delete(ListDatabaseHelper.TABLE_ITEMS,
-                            ListDatabaseHelper.LIST_ITEM_UID + "=" + id
+                    rowsDeleted = db.delete(ListDatabaseHelper.TABLE_LIST,
+                            ListDatabaseHelper.LIST_ID + "=" + id
                                     + " and " + selection,
                             selectionArgs);
                 }
@@ -130,7 +130,7 @@ public class ListProvider extends ContentProvider {
         int rowsUpdated = 0;
         switch (uriType) {
             case LIST:
-                rowsUpdated = db.update(ListDatabaseHelper.TABLE_ITEMS,
+                rowsUpdated = db.update(ListDatabaseHelper.TABLE_LIST,
                         values,
                         selection,
                         selectionArgs);
@@ -138,14 +138,14 @@ public class ListProvider extends ContentProvider {
             case LIST_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
-                    rowsUpdated = db.update(ListDatabaseHelper.TABLE_ITEMS,
+                    rowsUpdated = db.update(ListDatabaseHelper.TABLE_LIST,
                             values,
-                            ListDatabaseHelper.LIST_ITEM_UID + "=" + id,
+                            ListDatabaseHelper.LIST_ID + "=" + id,
                             null);
                 } else {
-                    rowsUpdated = db.update(ListDatabaseHelper.TABLE_ITEMS,
+                    rowsUpdated = db.update(ListDatabaseHelper.TABLE_LIST,
                             values,
-                            ListDatabaseHelper.LIST_ITEM_UID + "=" + id
+                            ListDatabaseHelper.LIST_ID + "=" + id
                                     + " and "
                                     + selection,
                             selectionArgs);

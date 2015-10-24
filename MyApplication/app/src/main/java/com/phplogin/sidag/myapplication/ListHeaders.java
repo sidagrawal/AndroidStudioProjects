@@ -9,24 +9,21 @@ import java.util.Random;
 public class ListHeaders {
 
     private String name;
-    private String id;
     private String uid;
-    private int timestamp;
+    private String timestamp;
     private int status;
     private ArrayList<ListItems> items;
 
-    public ListHeaders(String name, String id, ArrayList<ListItems> items, int timestamp, int status) {
+    public ListHeaders(String name, ArrayList<ListItems> items, String timestamp, int status) {
         this.uid = makeUID();
         this.name = name;
-        this.id = id;
         this.items = items;
         this.timestamp = timestamp;
         this.status = status;
     }
 
-    public ListHeaders(String name, String id, ArrayList<ListItems> items, String uid, int timestamp, int status) {
+    public ListHeaders(String name, ArrayList<ListItems> items, String uid, String timestamp, int status) {
         this.name = name;
-        this.id = id;
         this.items = items;
         this.uid = uid;
         this.timestamp = timestamp;
@@ -42,11 +39,11 @@ public class ListHeaders {
         this.uid = uid;
     }
 
-    public int getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -75,14 +72,6 @@ public class ListHeaders {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public ArrayList<ListItems> getItems() {

@@ -8,21 +8,18 @@ import java.util.Random;
 public class ListItems {
 
     private String name;
-    private String id;
     private String uid;
-    private int timestamp;
+    private String timestamp;
     private int status;
 
-    public ListItems(String id, String name, int timestamp, int status) {
-        this.id = id;
+    public ListItems(String name, String timestamp, int status) {
         this.name = name;
         this.uid = makeUID();
         this.timestamp = timestamp;
         this.status = status;
     }
 
-    public ListItems(String id, String name, String uid, int timestamp, int status) {
-        this.id = id;
+    public ListItems(String name, String uid, String timestamp, int status) {
         this.name = name;
         this.uid = uid;
         this.timestamp = timestamp;
@@ -49,11 +46,11 @@ public class ListItems {
         this.uid = uid;
     }
 
-    public int getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -74,11 +71,4 @@ public class ListItems {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 }

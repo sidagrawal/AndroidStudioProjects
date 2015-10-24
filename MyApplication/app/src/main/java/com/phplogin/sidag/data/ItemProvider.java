@@ -19,7 +19,7 @@ import android.text.TextUtils;
 public class ItemProvider extends ContentProvider {
     private ListDatabaseHelper mDB;
 
-    private static final String AUTHORITY = "com.phplogin.sidag.data.ListProvider";
+    private static final String AUTHORITY = "com.phplogin.sidag.data.ItemProvider";
     public static final int LISTITEMS = 100;
     public static final int LISTITEM_ID = 110;
 

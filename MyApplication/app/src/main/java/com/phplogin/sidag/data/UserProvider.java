@@ -19,7 +19,7 @@ import android.text.TextUtils;
 public class UserProvider extends ContentProvider {
     private ListDatabaseHelper mDB;
 
-    private static final String AUTHORITY = "com.phplogin.sidag.data.ListProvider";
+    private static final String AUTHORITY = "com.phplogin.sidag.data.UserProvider";
     public static final int LISTUSER = 100;
     public static final int LISTUSER_ID = 110;
 
@@ -57,7 +57,7 @@ public class UserProvider extends ContentProvider {
             int uriType = sURIMatcher.match(uri);
             switch (uriType) {
                 case LISTUSER_ID:
-                    queryBuilder.appendWhere(ListDatabaseHelper.LIST_ITEM_ID + "="
+                    queryBuilder.appendWhere(ListDatabaseHelper.USER_ID + "="
                             + uri.getLastPathSegment());
                     break;
                 case LISTUSER:
@@ -83,7 +83,7 @@ public class UserProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         db = mDB.getWritableDatabase();
-        long rowID = db.insert(ListDatabaseHelper.TABLE_ITEMS, "", values);
+        long rowID = db.insert(ListDatabaseHelper.TABLE_USER, "", values);
         if(rowID > 0){
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI_USERS, rowID);
             getContext().getContentResolver().notifyChange(_uri, null);
@@ -99,18 +99,18 @@ public class UserProvider extends ContentProvider {
         int rowsDeleted = 0;
         switch (uriType) {
             case LISTUSER:
-                rowsDeleted = db.delete(ListDatabaseHelper.TABLE_ITEMS, selection,
+                rowsDeleted = db.delete(ListDatabaseHelper.TABLE_USER, selection,
                         selectionArgs);
                 break;
             case LISTUSER_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
-                    rowsDeleted = db.delete(ListDatabaseHelper.TABLE_ITEMS,
-                            ListDatabaseHelper.LIST_ITEM_UID + "=" + id,
+                    rowsDeleted = db.delete(ListDatabaseHelper.TABLE_USER,
+                            ListDatabaseHelper.USER_ID + "=" + id,
                             null);
                 } else {
-                    rowsDeleted = db.delete(ListDatabaseHelper.TABLE_ITEMS,
-                            ListDatabaseHelper.LIST_ITEM_UID + "=" + id
+                    rowsDeleted = db.delete(ListDatabaseHelper.TABLE_USER,
+                            ListDatabaseHelper.USER_ID + "=" + id
                                     + " and " + selection,
                             selectionArgs);
                 }
@@ -130,7 +130,7 @@ public class UserProvider extends ContentProvider {
         int rowsUpdated = 0;
         switch (uriType) {
             case LISTUSER:
-                rowsUpdated = db.update(ListDatabaseHelper.TABLE_ITEMS,
+                rowsUpdated = db.update(ListDatabaseHelper.TABLE_USER,
                         values,
                         selection,
                         selectionArgs);
@@ -138,14 +138,14 @@ public class UserProvider extends ContentProvider {
             case LISTUSER_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
-                    rowsUpdated = db.update(ListDatabaseHelper.TABLE_ITEMS,
+                    rowsUpdated = db.update(ListDatabaseHelper.TABLE_USER,
                             values,
-                            ListDatabaseHelper.LIST_ITEM_UID + "=" + id,
+                            ListDatabaseHelper.USER_ID + "=" + id,
                             null);
                 } else {
-                    rowsUpdated = db.update(ListDatabaseHelper.TABLE_ITEMS,
+                    rowsUpdated = db.update(ListDatabaseHelper.TABLE_USER,
                             values,
-                            ListDatabaseHelper.LIST_ITEM_UID + "=" + id
+                            ListDatabaseHelper.USER_ID + "=" + id
                                     + " and "
                                     + selection,
                             selectionArgs);
