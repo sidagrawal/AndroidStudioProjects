@@ -78,8 +78,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 
         //Get the list of lists from the local database
+        projection = new String[]{ListDatabaseHelper.LIST_UID};
+        Cursor lists_in_local = mContentResolver.query(ListProvider.CONTENT_URI_LISTS, projection, null, null, null);
 
-        //Find what is in Remote but not in Local and make a list of what to add to Local
+        //Find what is in Remote but not in Local and make a list of what to add to Local and then add to local
+        Customer add_to_local_cust = new Customer(remote_customer);
+        if (lists_in_local != null) {
+            lists_in_local.moveToFirst();
+            while(!lists_in_local.isAfterLast()){
+                add_to_local_cust.removeListHeader(lists_in_local.getString(0));
+            }
+        }
+        add_to_local_cust.addToDatabase(mContentResolver);
 
         //Find all the Lists newly added to Local and add them to Remote
         String query = "SELECT " + ListDatabaseHelper.LIST_UID + ", " + ListDatabaseHelper.LIST_NAME +

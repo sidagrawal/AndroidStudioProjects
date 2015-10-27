@@ -47,12 +47,12 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
     //Create Statement for lists table
     private static final String CREATE_TABLE_LISTS = "create table " + TABLE_LIST
             + " ( " + LIST_ID + " integer primary key autoincrement, " +LIST_NAME + " text not null, " + LIST_UID
-            + " text not null, " + LIST_TIMESTAMP + " integer, " + LIST_STATUS + " integer, "+ EMAIL + " text not null );";
+            + " text not null, " + LIST_TIMESTAMP + " text not null, " + LIST_STATUS + " integer, "+ EMAIL + " text not null );";
 
     //Create statement for items table
     private static final String CREATE_TABLE_ITEMS = "create table " + TABLE_ITEMS
-            + " ( " + LIST_ITEM_ID + " integer primary key autoincrement, " + LIST_ID + " integer, "
-            + LIST_ITEM_STATUS + " integer, " + LIST_ITEM_TIMESTAMP + " integer, " + LIST_ITEM
+            + " ( " + LIST_ITEM_ID + " integer primary key autoincrement, " + LIST_UID + " text not null, "
+            + LIST_ITEM_STATUS + " integer, " + LIST_ITEM_TIMESTAMP + " text not null, " + LIST_ITEM
             + " text not null, " + LIST_ITEM_UID + " text not null );";
 
     //Create statement for the users table

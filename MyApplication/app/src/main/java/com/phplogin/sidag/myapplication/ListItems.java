@@ -1,5 +1,9 @@
 package com.phplogin.sidag.myapplication;
 
+import android.content.ContentValues;
+
+import com.phplogin.sidag.data.ListDatabaseHelper;
+
 import java.sql.Time;
 import java.util.Random;
 
@@ -63,13 +67,21 @@ public class ListItems {
         this.status = status;
     }
 
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ContentValues getAll(){
+        ContentValues values = new ContentValues();
+        values.put(ListDatabaseHelper.LIST_ITEM, this.name);
+        values.put(ListDatabaseHelper.LIST_ITEM_UID, this.uid);
+        values.put(ListDatabaseHelper.LIST_ITEM_STATUS, this.status);
+        values.put(ListDatabaseHelper.LIST_ITEM_TIMESTAMP, this.timestamp.toString());
+        return values;
     }
 
 }
