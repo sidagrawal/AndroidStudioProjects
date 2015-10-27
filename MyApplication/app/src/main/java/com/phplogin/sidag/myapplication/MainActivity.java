@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.deleteDatabase("list_data");
     }
 
     @Override
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             String[] projection = {ListDatabaseHelper.USERNAME};
             String selection = ListDatabaseHelper.USERNAME + " = '" + username + "'";
             Cursor check_user = getContentResolver().query(UserProvider.CONTENT_URI_USERS, projection, selection, null, null);
-            if(check_user == null){
+            if(check_user.getCount() == 0){
                 getContentResolver().insert(UserProvider.CONTENT_URI_USERS, user);
             }
             Intent intent = new Intent(this, MainListActivity.class);

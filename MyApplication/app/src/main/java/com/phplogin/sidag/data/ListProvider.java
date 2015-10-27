@@ -22,11 +22,15 @@ public class ListProvider extends ContentProvider {
     private static final String AUTHORITY = "com.phplogin.sidag.data.ListProvider";
     public static final int LIST = 100;
     public static final int LIST_ID = 110;
+    public static final int LIST_RAW_QUERY = 120;
 
     public static final String LISTITEMS_BASE_PATH = ListDatabaseHelper.TABLE_LIST;
+    public static final String RAW_QUERY = "rawquery";
 
     public static final Uri CONTENT_URI_LISTS = Uri.parse("content://" + AUTHORITY
             + "/" + LISTITEMS_BASE_PATH);
+    public static final Uri CONTENT_URI_LISTS_RAW_QUERY = Uri.parse("content://" + AUTHORITY
+            + "/" + LISTITEMS_BASE_PATH + RAW_QUERY);
 
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/mt-listitem";
@@ -38,6 +42,7 @@ public class ListProvider extends ContentProvider {
     static {
         sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH, LIST);
         sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH + "/#", LIST_ID);
+        sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH + RAW_QUERY, LIST_RAW_QUERY);
     }
     SQLiteDatabase db;
 
@@ -48,12 +53,16 @@ public class ListProvider extends ContentProvider {
         return true;
     }
 
+    public static String getAuthority(){
+        return AUTHORITY;
+    }
+
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
             SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
             queryBuilder.setTables(ListDatabaseHelper.TABLE_LIST);
-
+            Cursor cursor;
             int uriType = sURIMatcher.match(uri);
             switch (uriType) {
                 case LIST_ID:
@@ -63,11 +72,14 @@ public class ListProvider extends ContentProvider {
                 case LIST:
                     // no filter
                     break;
+                case LIST_RAW_QUERY:
+                    cursor = db.rawQuery(selection, selectionArgs);
+                    return cursor;
                 default:
                     throw new IllegalArgumentException("Unknown URI");
             }
 
-            Cursor cursor = queryBuilder.query(mDB.getReadableDatabase(),
+            cursor = queryBuilder.query(mDB.getReadableDatabase(),
                     projection, selection, selectionArgs, null, null, sortOrder);
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
             return cursor;

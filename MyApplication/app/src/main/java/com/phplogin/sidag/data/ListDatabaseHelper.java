@@ -13,6 +13,10 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "list_data";
 
+    //Add or Delete
+    public static final int ADD = 1;
+    public static final int DELETE = 2;
+
     //Columns for items table
     public static final String TABLE_ITEMS = "listitems";
     public static final String LIST_ITEM_ID = "list_item_id";

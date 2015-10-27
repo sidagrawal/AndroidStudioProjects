@@ -7,7 +7,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.phplogin.sidag.data.ListDatabaseHelper;
 import com.phplogin.sidag.data.ListProvider;
@@ -64,9 +66,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         //Get the list of lists from the remote database using email
-        Customer customer = null;
+        //TODO: Get the customer object in the background???
+        Customer remote_customer = null;
         try {
-            customer = new phpGetAllLists(getContext()).execute(email).get();
+            remote_customer = new phpGetAllLists(getContext()).execute(email).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -76,9 +79,19 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         //Get the list of lists from the local database
 
-        //Find what is in Remote but not in Local and make a list of what to add to Remote
+        //Find what is in Remote but not in Local and make a list of what to add to Local
 
         //Find all the Lists newly added to Local and add them to Remote
+        String query = "SELECT " + ListDatabaseHelper.LIST_UID + ", " + ListDatabaseHelper.LIST_NAME +
+                        ", " + ListDatabaseHelper.EMAIL + ", " + ListDatabaseHelper.LIST_STATUS + ", " +
+                        ListDatabaseHelper.LIST_TIMESTAMP + ", " + ListDatabaseHelper.LIST_ITEM_UID + ", "
+                        + ListDatabaseHelper.LIST_ITEM + ", " + ListDatabaseHelper.LIST_ITEM_STATUS + ", " +
+                        ListDatabaseHelper.LIST_ITEM_TIMESTAMP + " FROM " + ListDatabaseHelper.TABLE_LIST
+                        + ", " + ListDatabaseHelper.TABLE_ITEMS + " WHERE " + ListDatabaseHelper.LIST_STATUS +
+                        " AND " + ListDatabaseHelper.LIST_UID + " = " + ListDatabaseHelper.LIST_ITEM_UID;
+        Cursor add_to_remote = mContentResolver.query(ListProvider.CONTENT_URI_LISTS_RAW_QUERY, null, query, null, null);
+        if(add_to_remote.getCount() > 0)
+            Log.d("add to remote", DatabaseUtils.dumpCurrentRowToString(add_to_remote));
 
         //Find the lists that need to be deleted in local and delete that person-list pairing from remote
 
