@@ -1,6 +1,12 @@
 package com.phplogin.sidag.myapplication;
 
+import android.content.ContentValues;
+
+import com.phplogin.sidag.data.ListDatabaseHelper;
+
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -10,11 +16,11 @@ public class ListHeaders {
 
     private String name;
     private String uid;
-    private String timestamp;
+    private TimeStamp timestamp;
     private int status;
     private ArrayList<ListItems> items;
 
-    public ListHeaders(String name, ArrayList<ListItems> items, String timestamp, int status) {
+    public ListHeaders(String name, ArrayList<ListItems> items, TimeStamp timestamp, int status) {
         this.uid = makeUID();
         this.name = name;
         this.items = items;
@@ -22,7 +28,7 @@ public class ListHeaders {
         this.status = status;
     }
 
-    public ListHeaders(String name, ArrayList<ListItems> items, String uid, String timestamp, int status) {
+    public ListHeaders(String name, ArrayList<ListItems> items, String uid, TimeStamp timestamp, int status) {
         this.name = name;
         this.items = items;
         this.uid = uid;
@@ -39,11 +45,11 @@ public class ListHeaders {
         this.uid = uid;
     }
 
-    public String getTimestamp() {
+    public TimeStamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(TimeStamp timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -84,6 +90,15 @@ public class ListHeaders {
             result.add(item.getName());
         }
         return result;
+    }
+
+    public ContentValues getAll(){
+        ContentValues values = new ContentValues();
+        values.put(ListDatabaseHelper.LIST_UID, this.uid);
+        values.put(ListDatabaseHelper.LIST_NAME, this.name);
+        values.put(ListDatabaseHelper.LIST_STATUS, this.status);
+        values.put(ListDatabaseHelper.LIST_TIMESTAMP, this.timestamp.toString());
+        return values;
     }
 
     public void setItems(ArrayList<ListItems> items) {

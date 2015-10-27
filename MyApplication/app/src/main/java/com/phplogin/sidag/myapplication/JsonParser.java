@@ -89,7 +89,7 @@ public class JsonParser {
             }
         }
         reader.endObject();
-        return new ListHeaders(name, list_items, uid, timestamp, 0);
+        return new ListHeaders(name, list_items, uid, new TimeStamp(timestamp), 0);
     }
 
     private ArrayList<ListItems> readItems(JsonReader reader) throws IOException{
@@ -123,7 +123,7 @@ public class JsonParser {
             }
         }
         reader.endObject();
-        return new ListItems(name, uid, timestamp, 0);
+        return new ListItems(name, uid, new TimeStamp(timestamp), 0);
     }
 
     public Customer getCustomer() {

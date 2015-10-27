@@ -22,11 +22,15 @@ public class ItemProvider extends ContentProvider {
     private static final String AUTHORITY = "com.phplogin.sidag.data.ItemProvider";
     public static final int LISTITEMS = 100;
     public static final int LISTITEM_ID = 110;
+    public static final int LISTITEM_RAW_QUERY = 120;
 
     public static final String LISTITEMS_BASE_PATH = ListDatabaseHelper.TABLE_ITEMS;
+    public static final String RAW_QUERY = "rawquery";
 
     public static final Uri CONTENT_URI_ITEMS = Uri.parse("content://" + AUTHORITY
             + "/" + LISTITEMS_BASE_PATH);
+    public static final Uri CONTENT_URI_ITEMS_RAW_QUERY = Uri.parse("content://" + AUTHORITY
+            + "/" + LISTITEMS_BASE_PATH + RAW_QUERY);
 
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/mt-listitem";
@@ -38,6 +42,7 @@ public class ItemProvider extends ContentProvider {
     static {
         sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH, LISTITEMS);
         sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH + "/#", LISTITEM_ID);
+        sURIMatcher.addURI(AUTHORITY, LISTITEMS_BASE_PATH + RAW_QUERY, LISTITEM_RAW_QUERY);
     }
     SQLiteDatabase db;
 
@@ -53,13 +58,16 @@ public class ItemProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
             SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
             queryBuilder.setTables(ListDatabaseHelper.TABLE_ITEMS);
-
+            Cursor cursor;
             int uriType = sURIMatcher.match(uri);
             switch (uriType) {
                 case LISTITEM_ID:
                     queryBuilder.appendWhere(ListDatabaseHelper.LIST_ITEM_ID + "="
                             + uri.getLastPathSegment());
                     break;
+                case LISTITEM_RAW_QUERY:
+                    cursor = db.rawQuery(selection, selectionArgs);
+                    return cursor;
                 case LISTITEMS:
                     // no filter
                     break;
@@ -67,7 +75,7 @@ public class ItemProvider extends ContentProvider {
                     throw new IllegalArgumentException("Unknown URI");
             }
 
-            Cursor cursor = queryBuilder.query(mDB.getReadableDatabase(),
+            cursor = queryBuilder.query(mDB.getReadableDatabase(),
                     projection, selection, selectionArgs, null, null, sortOrder);
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
             return cursor;

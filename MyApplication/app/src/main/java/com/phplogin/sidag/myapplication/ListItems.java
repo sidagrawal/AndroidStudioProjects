@@ -1,5 +1,6 @@
 package com.phplogin.sidag.myapplication;
 
+import java.sql.Time;
 import java.util.Random;
 
 /**
@@ -9,17 +10,17 @@ public class ListItems {
 
     private String name;
     private String uid;
-    private String timestamp;
+    private TimeStamp timestamp;
     private int status;
 
-    public ListItems(String name, String timestamp, int status) {
+    public ListItems(String name, TimeStamp timestamp, int status) {
         this.name = name;
         this.uid = makeUID();
         this.timestamp = timestamp;
         this.status = status;
     }
 
-    public ListItems(String name, String uid, String timestamp, int status) {
+    public ListItems(String name, String uid, TimeStamp timestamp, int status) {
         this.name = name;
         this.uid = uid;
         this.timestamp = timestamp;
@@ -46,11 +47,11 @@ public class ListItems {
         this.uid = uid;
     }
 
-    public String getTimestamp() {
+    public TimeStamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(TimeStamp timestamp) {
         this.timestamp = timestamp;
     }
 

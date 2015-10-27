@@ -62,12 +62,12 @@ public class Customer {
     }
 
     public void addToDatabase(Context context){
-        ContentValues values = new ContentValues();
+        ContentValues list = new ContentValues();
         for(ListHeaders listHeaders : list_headers){
+
+            ContentValues listitems = new ContentValues();
             for(ListItems listItems : listHeaders.getItems()){
-                values.put(ListDatabaseHelper.LIST_ITEM, listItems.getName());
-                values.put(ListDatabaseHelper.LIST_ITEM_UID, listItems.getUid());
-                context.getContentResolver().insert(ListProvider.CONTENT_URI_LISTS, values);
+
             }
         }
     }
