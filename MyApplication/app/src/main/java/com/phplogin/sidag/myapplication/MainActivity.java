@@ -14,6 +14,7 @@ import android.widget.EditText;
 import com.phplogin.sidag.data.ListDatabaseHelper;
 import com.phplogin.sidag.data.ListProvider;
 import com.phplogin.sidag.data.UserProvider;
+import com.phplogin.sidag.gcm.RegistrationIntentService;
 
 import java.util.concurrent.ExecutionException;
 
@@ -23,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
+        //this.deleteDatabase("list_data");
     }
 
     @Override

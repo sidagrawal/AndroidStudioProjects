@@ -5,7 +5,8 @@
 
     <EditText android:id="@+id/ItemCaption"
         android:layout_height="wrap_content" android:layout_width="fill_parent"
-        android:layout_marginLeft="2dip" android:singleLine="true">
+        android:layout_marginLeft="2dip" android:singleLine="true"
+        android:textColor="#000000">
     </EditText>
 
 </LinearLayout>

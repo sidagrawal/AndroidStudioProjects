@@ -1,7 +1,10 @@
 package com.phplogin.sidag.myapplication;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.util.Log;
 
+import com.phplogin.sidag.data.ItemProvider;
 import com.phplogin.sidag.data.ListDatabaseHelper;
 
 import java.sql.Time;
@@ -82,6 +85,19 @@ public class ListItems {
         values.put(ListDatabaseHelper.LIST_ITEM_STATUS, this.status);
         values.put(ListDatabaseHelper.LIST_ITEM_TIMESTAMP, this.timestamp.toString());
         return values;
+    }
+
+    public void updateTimestamp(){
+        this.timestamp.updateTimestamp();
+    }
+
+    public void updateDatabase(ContentResolver contentResolver){
+        updateTimestamp();
+        ContentValues values = getAll();
+        String selection = ListDatabaseHelper.LIST_ITEM_UID + "= ?";
+        String[] selectionArgs = {this.uid};
+        contentResolver.update(ItemProvider.CONTENT_URI_ITEMS, values, selection, selectionArgs);
+        Log.d("update", "Success");
     }
 
 }

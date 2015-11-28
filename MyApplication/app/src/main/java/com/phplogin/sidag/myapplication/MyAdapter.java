@@ -1,6 +1,7 @@
 package com.phplogin.sidag.myapplication;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,12 +53,18 @@ public class MyAdapter extends BaseAdapter {
         holder.caption.setId(position);
 
         //we need to update adapter once we finish with editing
+        holder.caption.setFocusable(true);
         holder.caption.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus){
                     final int position = v.getId();
                     final EditText Caption = (EditText) v;
                     myItems.get(position).setName(Caption.getText().toString());
+                    Log.d("Focus", "Lost the focus");
+                    myItems.get(position).updateDatabase(context.getContentResolver());
+                }
+                else if(hasFocus){
+                    Log.d("Focus", "I got the focus");
                 }
             }
         });

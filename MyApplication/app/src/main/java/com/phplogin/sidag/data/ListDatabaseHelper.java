@@ -81,7 +81,6 @@ public class ListDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LIST);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         onCreate(db);
-
     }
 
 }

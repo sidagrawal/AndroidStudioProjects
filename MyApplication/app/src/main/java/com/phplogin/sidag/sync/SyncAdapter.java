@@ -19,6 +19,7 @@ import com.phplogin.sidag.myapplication.phpGetAllLists;
 
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -80,28 +81,30 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         //Get the list of lists from the local database
         projection = new String[]{ListDatabaseHelper.LIST_UID};
         Cursor lists_in_local = mContentResolver.query(ListProvider.CONTENT_URI_LISTS, projection, null, null, null);
-
         //Find what is in Remote but not in Local and make a list of what to add to Local and then add to local
         Customer add_to_local_cust = new Customer(remote_customer);
         if (lists_in_local != null) {
             lists_in_local.moveToFirst();
             while(!lists_in_local.isAfterLast()){
-                add_to_local_cust.removeListHeader(lists_in_local.getString(0));
+                add_to_local_cust.removeListHeader(lists_in_local.getString(0), mContentResolver);
+                lists_in_local.moveToNext();
             }
         }
+        lists_in_local.close();
         add_to_local_cust.addToDatabase(mContentResolver);
+        dumpDatabase();
 
         //Find all the Lists newly added to Local and add them to Remote
-        String query = "SELECT " + ListDatabaseHelper.LIST_UID + ", " + ListDatabaseHelper.LIST_NAME +
+        String query = "SELECT " + ListDatabaseHelper.TABLE_LIST + "." + ListDatabaseHelper.LIST_UID + ", "
+                        + ListDatabaseHelper.LIST_NAME +
                         ", " + ListDatabaseHelper.EMAIL + ", " + ListDatabaseHelper.LIST_STATUS + ", " +
                         ListDatabaseHelper.LIST_TIMESTAMP + ", " + ListDatabaseHelper.LIST_ITEM_UID + ", "
                         + ListDatabaseHelper.LIST_ITEM + ", " + ListDatabaseHelper.LIST_ITEM_STATUS + ", " +
                         ListDatabaseHelper.LIST_ITEM_TIMESTAMP + " FROM " + ListDatabaseHelper.TABLE_LIST
                         + ", " + ListDatabaseHelper.TABLE_ITEMS + " WHERE " + ListDatabaseHelper.LIST_STATUS +
-                        " AND " + ListDatabaseHelper.LIST_UID + " = " + ListDatabaseHelper.LIST_ITEM_UID;
+                        " AND " + ListDatabaseHelper.TABLE_LIST + "." + ListDatabaseHelper.LIST_UID + " = " +
+                        ListDatabaseHelper.TABLE_ITEMS + "." + ListDatabaseHelper.LIST_UID;
         Cursor add_to_remote = mContentResolver.query(ListProvider.CONTENT_URI_LISTS_RAW_QUERY, null, query, null, null);
-        if(add_to_remote.getCount() > 0)
-            Log.d("add to remote", DatabaseUtils.dumpCurrentRowToString(add_to_remote));
 
         //Find the lists that need to be deleted in local and delete that person-list pairing from remote
 
@@ -111,5 +114,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 
 
+    }
+
+    private void dumpDatabase(){
+        String query = "SELECT * FROM " + /*ListDatabaseHelper.TABLE_LIST + ", " +*/ ListDatabaseHelper.TABLE_ITEMS;
+        Cursor dump = mContentResolver.query(ListProvider.CONTENT_URI_LISTS_RAW_QUERY, null, query, null, null);
+        dump.moveToFirst();
+        Log.d("count", Integer.toString(dump.getCount()));
+        Log.d("dump", DatabaseUtils.dumpCursorToString(dump));
+        dump.close();
     }
 }
